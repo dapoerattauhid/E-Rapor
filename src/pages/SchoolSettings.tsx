@@ -17,6 +17,7 @@ import { Save, Building2, FileText, Loader2, Image } from "lucide-react";
 
 interface FormData {
   nama_sekolah: string;
+  nama_yayasan: string;
   npsn: string;
   alamat: string;
   semester: string;
@@ -33,9 +34,9 @@ interface FormData {
 export default function SchoolSettings() {
   const { data: schoolSettings, isLoading } = useSchoolSettings();
   const upsertSettings = useUpsertSchoolSettings();
-
   const [formData, setFormData] = useState<FormData>({
     nama_sekolah: "",
+    nama_yayasan: "",
     npsn: "",
     alamat: "",
     semester: "1",
@@ -53,6 +54,7 @@ export default function SchoolSettings() {
     if (schoolSettings) {
       setFormData({
         nama_sekolah: schoolSettings.nama_sekolah,
+        nama_yayasan: (schoolSettings as any).nama_yayasan || "",
         npsn: schoolSettings.npsn,
         alamat: schoolSettings.alamat || "",
         semester: schoolSettings.semester,
@@ -134,6 +136,15 @@ export default function SchoolSettings() {
                   onChange={(e) => handleChange("nama_sekolah", e.target.value)}
                   placeholder="SMP Negeri 1 Jakarta"
                   required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="nama_yayasan">Nama Yayasan</Label>
+                <Input
+                  id="nama_yayasan"
+                  value={formData.nama_yayasan}
+                  onChange={(e) => handleChange("nama_yayasan", e.target.value)}
+                  placeholder="YAYASAN AT TAUHID AL ISLAMY"
                 />
               </div>
               <div className="space-y-2">

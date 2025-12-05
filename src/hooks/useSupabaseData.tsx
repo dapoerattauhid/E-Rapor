@@ -207,7 +207,8 @@ export function useSubjects() {
       const { data, error } = await supabase
         .from("subjects")
         .select("*")
-        .order("nama");
+        .order("urutan", { ascending: true })
+        .order("nama", { ascending: true });
       if (error) throw error;
       return data as DbSubject[];
     },
@@ -230,7 +231,7 @@ export function useAddSubject() {
 export function useUpdateSubject() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...updates }: { id: string; nama?: string; kode?: string }) => {
+    mutationFn: async ({ id, ...updates }: { id: string; nama?: string; kode?: string; urutan?: number }) => {
       const { error } = await supabase
         .from("subjects")
         .update(updates)

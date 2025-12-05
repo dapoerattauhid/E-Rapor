@@ -221,6 +221,11 @@ export default function ReportPreview() {
                   </div>
 
                   <div style={{width: '70%', textAlign: 'center', padding: '0 10px'}}>
+                    {(schoolSettings as any)?.nama_yayasan && (
+                      <p className="text-xs font-semibold uppercase" style={{margin: '0 0 4px 0'}}>
+                        {(schoolSettings as any).nama_yayasan}
+                      </p>
+                    )}
                     <h2 className="text-lg font-bold uppercase" style={{margin: '0 0 4px 0'}}>
                       {schoolSettings?.nama_sekolah}
                     </h2>

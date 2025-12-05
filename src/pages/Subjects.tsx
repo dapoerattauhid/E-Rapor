@@ -32,7 +32,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
-import { Plus, Pencil, Trash2, BookOpen, Loader2, ShieldAlert } from "lucide-react";
+import { Plus, Pencil, Trash2, BookOpen, Loader2, ShieldAlert, ArrowUp, ArrowDown } from "lucide-react";
 
 interface SubjectForm {
   nama: string;
@@ -104,6 +104,46 @@ export default function Subjects() {
       toast({
         title: "Error",
         description: error.message || "Gagal menghapus mata pelajaran",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleMoveUp = async (index: number) => {
+    if (index === 0) return;
+    try {
+      const currentSubject = subjects[index];
+      const previousSubject = subjects[index - 1];
+      
+      await updateSubject.mutateAsync({
+        id: currentSubject.id,
+        urutan: previousSubject.urutan - 1,
+      });
+      toast({ title: "Berhasil", description: "Urutan mata pelajaran berhasil diperbarui" });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Gagal memindahkan urutan",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleMoveDown = async (index: number) => {
+    if (index === subjects.length - 1) return;
+    try {
+      const currentSubject = subjects[index];
+      const nextSubject = subjects[index + 1];
+      
+      await updateSubject.mutateAsync({
+        id: currentSubject.id,
+        urutan: nextSubject.urutan + 1,
+      });
+      toast({ title: "Berhasil", description: "Urutan mata pelajaran berhasil diperbarui" });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Gagal memindahkan urutan",
         variant: "destructive",
       });
     }
@@ -206,7 +246,7 @@ export default function Subjects() {
                 <TableHead className="w-16 text-center">No</TableHead>
                 <TableHead className="w-24">Kode</TableHead>
                 <TableHead>Nama Mata Pelajaran</TableHead>
-                <TableHead className="w-32 text-center">Aksi</TableHead>
+                <TableHead className="w-40 text-center">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -227,6 +267,24 @@ export default function Subjects() {
                     <TableCell>{subject.nama}</TableCell>
                     <TableCell>
                       <div className="flex items-center justify-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleMoveUp(index)}
+                          disabled={index === 0}
+                          title="Pindah ke atas"
+                        >
+                          <ArrowUp className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleMoveDown(index)}
+                          disabled={index === subjects.length - 1}
+                          title="Pindah ke bawah"
+                        >
+                          <ArrowDown className="h-4 w-4" />
+                        </Button>
                         <Button
                           variant="ghost"
                           size="icon"

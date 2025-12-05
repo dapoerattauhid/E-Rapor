@@ -178,6 +178,7 @@ export type Database = {
           logo_dinas_url: string | null
           nama_kepala_sekolah: string | null
           nama_sekolah: string
+          nama_yayasan: string | null
           niy_kepala_sekolah: string | null
           npsn: string
           semester: string
@@ -185,7 +186,6 @@ export type Database = {
           telepon: string | null
           updated_at: string
           website: string | null
-        }
         Insert: {
           alamat?: string | null
           created_at?: string
@@ -195,6 +195,7 @@ export type Database = {
           logo_dinas_url?: string | null
           nama_kepala_sekolah?: string | null
           nama_sekolah: string
+          nama_yayasan?: string | null
           niy_kepala_sekolah?: string | null
           npsn: string
           semester?: string
@@ -202,7 +203,6 @@ export type Database = {
           telepon?: string | null
           updated_at?: string
           website?: string | null
-        }
         Update: {
           alamat?: string | null
           created_at?: string
@@ -212,12 +212,15 @@ export type Database = {
           logo_dinas_url?: string | null
           nama_kepala_sekolah?: string | null
           nama_sekolah?: string
+          nama_yayasan?: string | null
           niy_kepala_sekolah?: string | null
           npsn?: string
           semester?: string
           tahun_pelajaran?: string
           telepon?: string | null
           updated_at?: string
+          website?: string | null
+        } updated_at?: string
           website?: string | null
         }
         Relationships: []
@@ -270,18 +273,21 @@ export type Database = {
           id: string
           kode: string
           nama: string
+          urutan: number
         }
         Insert: {
           created_at?: string
           id?: string
           kode: string
           nama: string
+          urutan?: number
         }
         Update: {
           created_at?: string
           id?: string
           kode?: string
           nama?: string
+          urutan?: number
         }
         Relationships: []
       }
