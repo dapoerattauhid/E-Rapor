@@ -1,3 +1,96 @@
+# E-Rapor
+
+> Aplikasi rapor sekolah berbasis React + Vite + Supabase.
+
+Ringkasan singkat:
+- Frontend: Vite + React + TypeScript
+- Styling: Tailwind CSS
+- Auth & DB: Supabase
+- State fetching: @tanstack/react-query
+
+Jika Anda ingin menjalankan aplikasi ini secara lokal, ikuti panduan berikut.
+
+## Prasyarat
+- Node.js (v18+ direkomendasikan)
+- npm atau pnpm
+- Akun Supabase (untuk database dan auth)
+
+## Instalasi
+1. Clone repository:
+
+```bash
+git clone https://github.com/dapoerattauhid/E-Rapor.git
+cd E-Rapor
+```
+
+2. Install dependensi:
+
+```bash
+npm install
+```
+
+3. Siapkan environment variables di file `.env` (root project) atau di hosting:
+
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-or-publishable-key
+```
+
+4. Jalankan development server:
+
+```bash
+npm run dev
+```
+
+5. Buka `http://localhost:5173` (atau port yang ditampilkan oleh Vite).
+
+## Skrip yang tersedia
+- `npm run dev` — menjalankan dev server (Vite)
+- `npm run build` — membangun aplikasi untuk produksi
+- `npm run preview` — preview hasil build
+- `npm run lint` — jalankan ESLint
+
+## Database & Migrasi
+Folder migrasi SQL ada di `supabase/migrations/`.
+
+- Untuk menerapkan migrasi secara manual Anda bisa menggunakan `psql` atau Supabase CLI. Contoh dengan `psql`:
+
+```bash
+# jika Anda punya DATABASE_URL
+psql "$DATABASE_URL" -f supabase/migrations/20251205000000_add_nama_yayasan.sql
+psql "$DATABASE_URL" -f supabase/migrations/20251205000001_add_urutan_subjects.sql
+```
+
+- Atau gunakan Supabase CLI (`supabase db push` atau `supabase db reset` tergantung alur Anda).
+
+Catatan: migrasi yang ditambahkan:
+- `20251205000000_add_nama_yayasan.sql` — menambahkan kolom `nama_yayasan` pada `school_settings`.
+- `20251205000001_add_urutan_subjects.sql` — menambahkan kolom `urutan` pada `subjects` untuk urutan manual.
+
+## Fitur penting
+- Kop rapor sekarang memiliki field `nama_yayasan` yang dapat dikonfigurasi pada halaman **Pengaturan Sekolah**.
+- Daftar mata pelajaran (`Subjects`) mendukung urutan manual (`urutan`) yang dapat diubah oleh admin melalui tombol naik/turun.
+
+## Struktur proyek (singkat)
+- `src/` — semua kode sumber frontend
+	- `pages/` — halaman aplikasi (Dashboard, Students, Subjects, SchoolSettings, dll.)
+	- `hooks/` — hooks kustom (termasuk `useSupabaseData.tsx` untuk query/mutation)
+	- `integrations/supabase/` — client dan tipe database yang dihasilkan
+	- `components/` — komponen UI dan layout
+
+## Cara Menjalankan Migrasi dan Pengaturan Awal
+1. Pastikan Supabase project sudah tersedia dan URL + public key di-set di `.env`.
+2. Jalankan SQL migration di atas pada database Anda.
+3. Buka aplikasi, masuk sebagai admin, lalu buka `Pengaturan Sekolah` untuk melengkapi data (termasuk `Nama Yayasan`).
+
+## Kontribusi
+Lihat `docs/CONTRIBUTING.md` untuk panduan kontribusi.
+
+---
+Jika Anda mau, saya bisa:
+- Menambahkan file dokumentasi tambahan (`ARCHITECTURE.md`, `DEPLOY.md`).
+- Membuat ringkasan API/hook yang lebih lengkap.
+
 # Welcome to your Lovable project
 
 ## Project info
