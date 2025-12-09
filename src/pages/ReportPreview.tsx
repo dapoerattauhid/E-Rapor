@@ -252,10 +252,10 @@ export default function ReportPreview() {
                 {/* Title */}
                 <div style={{textAlign: 'center', marginBottom: '24px', margin: '0 auto 24px auto'}}>
                   <h3 style={{fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase', margin: '0 0 8px 0'}}>
-                    SUMATIF KOMPETENSI PESERTA DIDIK
+                    CAPAIAN KOMPETENSI PESERTA DIDIK
                   </h3>
                   <p style={{fontSize: '14px', margin: '0'}}>
-                    PENILAIAN AKHIR SEMESTER
+                    SUMATIF AKHIR SEMESTER
                   </p>
                 </div>
 
