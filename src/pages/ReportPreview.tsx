@@ -225,20 +225,20 @@ export default function ReportPreview() {
 
                   <div style={{width: '70%', textAlign: 'center', padding: '0 10px'}}>
                     {(schoolSettings as any)?.nama_yayasan && (
-                      <p className="text-xs font-semibold uppercase" style={{margin: '0 0 4px 0'}}>
+                      <p style={{fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', margin: '0 0 4px 0'}}>
                         {(schoolSettings as any).nama_yayasan}
                       </p>
                     )}
-                    <h2 className="text-lg font-bold uppercase" style={{margin: '0 0 4px 0'}}>
+                    <h2 style={{fontSize: '15px', fontWeight: 'bold', textTransform: 'uppercase', margin: '0 0 4px 0'}}>
                       {schoolSettings?.nama_sekolah}
                     </h2>
-                    <p className="text-xs" style={{margin: '0 0 2px 0'}}>{schoolSettings?.alamat}</p>
-                    <p className="text-xs" style={{margin: '0 0 2px 0'}}>
+                    <p style={{fontSize: '11px', margin: '0 0 2px 0'}}>{schoolSettings?.alamat}</p>
+                    <p style={{fontSize: '11px', margin: '0 0 2px 0'}}>
                       {schoolSettings?.telepon && `Telp: ${schoolSettings.telepon}`}
                       {schoolSettings?.email && ` | Email: ${schoolSettings.email}`}
                     </p>
                     {schoolSettings?.website && (
-                      <p className="text-xs" style={{margin: '0'}}>{schoolSettings.website}</p>
+                      <p style={{fontSize: '11px', margin: '0'}}>{schoolSettings.website}</p>
                     )}
                   </div>
 
