@@ -60,7 +60,7 @@ export default function ReportPreview() {
       .student-info { display: block; margin-bottom: 8px; }
       .student-info .row { display:flex; justify-content:space-between; }
       .attendance_tbl td:first-child { width: 35%; font-weight: 600; }
-      @page { size: A4; margin: 20mm 20mm 20mm 30mm; }
+      @page { size: A4; margin: 20mm 20mm 20mm 20mm; }
       @media print { button { display: none; } }
     `;
 
