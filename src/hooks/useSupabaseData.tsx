@@ -121,6 +121,17 @@ export interface DbClass {
   created_at: string;
 }
 
+export interface DbStudentNote {
+  id: string;
+  student_id: string;
+  semester: string;
+  tahun_pelajaran: string;
+  catatan_wali_kelas: string | null;
+  tanggapan_orang_tua: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 // School Settings
 export function useSchoolSettings() {
   return useQuery({
@@ -578,6 +589,60 @@ export function useTeacherClassAssignments() {
         .order("kelas", { ascending: true });
       if (error) throw error;
       return data as any[];
+    },
+  });
+}
+
+// Student Notes
+export function useStudentNotes() {
+  return useQuery({
+    queryKey: ["studentNotes"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("student_notes").select("*");
+      if (error) throw error;
+      return data as DbStudentNote[];
+    },
+  });
+}
+
+export function useUpsertStudentNote() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (note: Omit<DbStudentNote, "id" | "created_at" | "updated_at">) => {
+      const { data: existing } = await supabase
+        .from("student_notes")
+        .select("id")
+        .eq("student_id", note.student_id)
+        .eq("semester", note.semester)
+        .eq("tahun_pelajaran", note.tahun_pelajaran)
+        .maybeSingle();
+
+      if (existing) {
+        const { error } = await supabase
+          .from("student_notes")
+          .update(note)
+          .eq("id", existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("student_notes").insert(note);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["studentNotes"] });
+    },
+  });
+}
+
+export function useDeleteStudentNote() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("student_notes").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["studentNotes"] });
     },
   });
 }

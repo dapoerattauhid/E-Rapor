@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { useStudents, useGrades, useAttendance, useSubjects, useSchoolSettings, useEkstrakurikuler, usePrestasi } from "@/hooks/useSupabaseData";
+import { useStudents, useGrades, useAttendance, useSubjects, useSchoolSettings, useEkstrakurikuler, usePrestasi, useStudentNotes } from "@/hooks/useSupabaseData";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -28,6 +28,7 @@ export default function ReportPreview() {
   const { data: schoolSettings } = useSchoolSettings();
   const { data: ekstrakurikuler = [] } = useEkstrakurikuler();
   const { data: prestasi = [] } = usePrestasi();
+  const { data: studentNotes = [] } = useStudentNotes();
 
   const [selectedKelas, setSelectedKelas] = useState<string>("");
   const [selectedStudent, setSelectedStudent] = useState<string>("");
@@ -115,6 +116,13 @@ export default function ReportPreview() {
       p.student_id === selectedStudent &&
       p.semester === schoolSettings?.semester &&
       p.tahun_pelajaran === schoolSettings?.tahun_pelajaran
+  );
+
+  const currentStudentNote = studentNotes.find(
+    (n) =>
+      n.student_id === selectedStudent &&
+      n.semester === schoolSettings?.semester &&
+      n.tahun_pelajaran === schoolSettings?.tahun_pelajaran
   );
 
   // Debug logs removed for production
@@ -210,254 +218,254 @@ export default function ReportPreview() {
         {/* Report Preview */}
         {selectedStudent && currentStudent ? (
 
-              <div
-                ref={reportRef}
-                className="print-report rounded-xl border border-border bg-white p-6 animate-fade-in"
-                style={{ color: '#1a1a1a', backgroundColor: '#ffffff' }}
-              >
-                {/* Kop Rapor */}
-                <div className="kop-rapor mb-6" style={{display: 'flex', alignItems: 'center', paddingBottom: '10px', borderBottom: '3px double black'}}>
-                  <div className="kop-logos" style={{width: '15%', textAlign: 'left', display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
-                    {schoolSettings?.logo_url ? (
-                      <img src={schoolSettings.logo_url} alt="Logo Sekolah" style={{height: '80px', width: 'auto', maxWidth: '100%', objectFit: 'contain'}} />
-                    ) : null}
-                  </div>
-
-                  <div style={{width: '70%', textAlign: 'center', padding: '0 10px'}}>
-                    {(schoolSettings as any)?.nama_yayasan && (
-                      <p style={{fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', margin: '0 0 4px 0'}}>
-                        {(schoolSettings as any).nama_yayasan}
-                      </p>
-                    )}
-                    <h2 style={{fontSize: '15px', fontWeight: 'bold', textTransform: 'uppercase', margin: '0 0 4px 0'}}>
-                      {schoolSettings?.nama_sekolah}
-                    </h2>
-                    <p style={{fontSize: '11px', margin: '0 0 2px 0'}}>{schoolSettings?.alamat}</p>
-                    <p style={{fontSize: '11px', margin: '0 0 2px 0'}}>
-                      {schoolSettings?.telepon && `Telp: ${schoolSettings.telepon}`}
-                      {schoolSettings?.email && ` | Email: ${schoolSettings.email}`}
-                    </p>
-                    {schoolSettings?.website && (
-                      <p style={{fontSize: '11px', margin: '0'}}>{schoolSettings.website}</p>
-                    )}
-                  </div>
-
-                  <div className="kop-logos" style={{width: '15%', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-                    {(schoolSettings as any)?.logo_yayasan_url ? (
-                      <img src={(schoolSettings as any).logo_yayasan_url} alt="Logo Yayasan/Dinas" style={{height: '80px', width: 'auto', maxWidth: '100%', objectFit: 'contain'}} />
-                    ) : null}
-                  </div>
-                </div>
-
-                {/* Title */}
-                <div style={{textAlign: 'center', marginBottom: '24px', margin: '0 auto 24px auto'}}>
-                  <h3 style={{fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase', margin: '0 0 8px 0'}}>
-                    CAPAIAN KOMPETENSI PESERTA DIDIK
-                  </h3>
-                  <p style={{fontSize: '14px', margin: '0'}}>
-                    SUMATIF AKHIR SEMESTER
-                  </p>
-                </div>
-
-                {/* Student Info - two column layout */}
-                <table className="borderless-table w-full mb-4" style={{border: 'none', borderCollapse: 'collapse'}}>
-                  <tbody>
-                    <tr>
-                      <td style={{width: '18%', border: 'none', padding: '4px 0'}}>Nama Lengkap</td>
-                      <td style={{width: '2%', border: 'none', padding: '4px 0', textAlign: 'center'}}>:</td>
-                      <td style={{width: '30%', border: 'none', padding: '4px 0'}}>{currentStudent.nama_lengkap}</td>
-                      <td style={{width: '15%', border: 'none', padding: '4px 0'}}>Kelas / Fase</td>
-                      <td style={{width: '2%', border: 'none', padding: '4px 0', textAlign: 'center'}}>:</td>
-                      <td style={{width: '33%', border: 'none', padding: '4px 0'}}>{currentStudent.kelas}</td>
-                    </tr>
-                    <tr>
-                      <td style={{width: '18%', border: 'none', padding: '4px 0'}}>NISN</td>
-                      <td style={{width: '2%', border: 'none', padding: '4px 0', textAlign: 'center'}}>:</td>
-                      <td style={{width: '30%', border: 'none', padding: '4px 0'}}>{currentStudent.nis}</td>
-                      <td style={{width: '15%', border: 'none', padding: '4px 0'}}>Semester</td>
-                      <td style={{width: '2%', border: 'none', padding: '4px 0', textAlign: 'center'}}>:</td>
-                      <td style={{width: '33%', border: 'none', padding: '4px 0'}}>{schoolSettings?.semester === "1" ? "Ganjil" : "Genap"}</td>
-                    </tr>
-                    <tr>
-                      <td style={{width: '18%', border: 'none', padding: '4px 0'}}>NPSN</td>
-                      <td style={{width: '2%', border: 'none', padding: '4px 0', textAlign: 'center'}}>:</td>
-                      <td style={{width: '30%', border: 'none', padding: '4px 0'}}>{schoolSettings?.npsn}</td>
-                      <td style={{width: '15%', border: 'none', padding: '4px 0'}}>Tahun Ajaran</td>
-                      <td style={{width: '2%', border: 'none', padding: '4px 0', textAlign: 'center'}}>:</td>
-                      <td style={{width: '33%', border: 'none', padding: '4px 0'}}>{schoolSettings?.tahun_pelajaran}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                {/* Grades Header */}
-                <h4 className="font-semibold mb-2" style={{margin: '16px 0 8px 0'}}>A. Nilai Akademik</h4>
-
-                {/* Grades Table */}
-                <table className="grades_tbl w-full border border-gray-300 border-collapse mb-4">
-                  <colgroup>
-                    <col className="no-col" />
-                    <col className="subject-col" />
-                    <col className="grade-col" />
-                    <col className="competency-col" />
-                  </colgroup>
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border border-gray-300 p-2 no-col" style={{textAlign: 'center'}}>No</th>
-                      <th className="border border-gray-300 p-2 subject-col">Mata Pelajaran</th>
-                      <th className="border border-gray-300 p-2 grade-col" style={{textAlign: 'center'}}>Nilai</th>
-                      <th className="border border-gray-300 p-2 competency-col">Capaian Kompetensi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredSubjects.map((subject, index) => {
-                      const grade = studentGrades.find((g) => g.subject_id === subject.id);
-                      return (
-                        <tr key={subject.id}>
-                          <td className="border border-gray-300 p-2 no-col" style={{textAlign: 'center'}}>{index + 1}</td>
-                          <td className="border border-gray-300 p-2 subject-col">{subject.nama}</td>
-                          <td className="border border-gray-300 p-2 font-medium grade-col" style={{textAlign: 'center'}}>
-                            {grade?.nilai_akhir || "-"}
-                          </td>
-                          <td className="border border-gray-300 p-2 competency-col">
-                            {grade?.capaian_kompetensi || "-"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-
-                {/* Attendance (vertical layout) */}
-                <h4 className="font-semibold mb-2" style={{margin: '16px 0 8px 0'}}>B. Ketidakhadiran</h4>
-                <table className="attendance_tbl w-full border border-gray-300 border-collapse mb-8">
-                  <tbody>
-                    <tr>
-                      <td className="border border-gray-300 p-2" style={{width: '85%'}}>Sakit</td>
-                      <td className="border border-gray-300 p-2" style={{width: '15%', textAlign: 'center'}}>{studentAttendance?.sakit || 0} hari</td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-300 p-2">Izin</td>
-                      <td className="border border-gray-300 p-2" style={{textAlign: 'center'}}>{studentAttendance?.izin || 0} hari</td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-300 p-2">Tanpa Keterangan</td>
-                      <td className="border border-gray-300 p-2" style={{textAlign: 'center'}}>{studentAttendance?.tanpa_keterangan || 0} hari</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                {/* C. Ekstrakurikuler */}
-                <h4 className="font-semibold mb-2" style={{margin: '16px 0 8px 0'}}>C. Ekstrakurikuler</h4>
-                <table className="w-full border border-gray-300 border-collapse mb-4">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border border-gray-300 p-2" style={{width: '5%', textAlign: 'center'}}>No</th>
-                      <th className="border border-gray-300 p-2" style={{width: '45%'}}>Kegiatan Ekstrakurikuler</th>
-                      <th className="border border-gray-300 p-2" style={{width: '15%', textAlign: 'center'}}>Predikat</th>
-                      <th className="border border-gray-300 p-2" style={{width: '35%'}}>Keterangan</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentEkstrakurikuler.length > 0 ? (
-                      studentEkstrakurikuler.map((e, index) => (
-                        <tr key={e.id}>
-                          <td className="border border-gray-300 p-2" style={{textAlign: 'center'}}>{index + 1}</td>
-                          <td className="border border-gray-300 p-2">{e.nama_kegiatan}</td>
-                          <td className="border border-gray-300 p-2" style={{textAlign: 'center'}}>{e.predikat || '-'}</td>
-                          <td className="border border-gray-300 p-2">{e.keterangan || '-'}</td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td className="border border-gray-300 p-2 text-center" colSpan={4} style={{height: '40px'}}>-</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-
-                {/* D. Prestasi */}
-                <h4 className="font-semibold mb-2" style={{margin: '16px 0 8px 0'}}>D. Prestasi</h4>
-                <table className="w-full border border-gray-300 border-collapse mb-4">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border border-gray-300 p-2" style={{width: '5%', textAlign: 'center'}}>No</th>
-                      <th className="border border-gray-300 p-2" style={{width: '45%'}}>Jenis Prestasi</th>
-                      <th className="border border-gray-300 p-2" style={{width: '15%', textAlign: 'center'}}>Tingkat</th>
-                      <th className="border border-gray-300 p-2" style={{width: '35%'}}>Keterangan</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentPrestasi.length > 0 ? (
-                      studentPrestasi.map((p, index) => (
-                        <tr key={p.id}>
-                          <td className="border border-gray-300 p-2" style={{textAlign: 'center'}}>{index + 1}</td>
-                          <td className="border border-gray-300 p-2">{p.jenis_prestasi}</td>
-                          <td className="border border-gray-300 p-2" style={{textAlign: 'center'}}>{p.tingkat || '-'}</td>
-                          <td className="border border-gray-300 p-2">{p.keterangan || '-'}</td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td className="border border-gray-300 p-2 text-center" colSpan={4} style={{height: '40px'}}>-</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-
-                {/* E. Catatan Wali Kelas */}
-                <h4 className="font-semibold mb-2" style={{margin: '16px 0 8px 0'}}>E. Catatan Wali Kelas</h4>
-                <div style={{border: '1px solid #333', padding: '12px', minHeight: '80px', marginBottom: '16px'}}>
-                  {/* Space untuk catatan */}
-                </div>
-
-                {/* F. Tanggapan Orang Tua/Wali */}
-                <h4 className="font-semibold mb-2" style={{margin: '16px 0 8px 0'}}>F. Tanggapan Orang Tua/Wali</h4>
-                <div style={{border: '1px solid #333', padding: '12px', minHeight: '80px', marginBottom: '24px'}}>
-                  {/* Space untuk tanggapan */}
-                </div>
-
-                {/* Signatures - Wali Murid (kiri) & Wali Kelas (kanan) */}
-                <div style={{marginTop: '40px'}}></div>
-                <table className="borderless-table w-full" style={{fontSize: '11pt'}}>
-                  <tbody>
-                    <tr>
-                      <td style={{width: '50%', textAlign: 'center', border: 'none', padding: '0 30px 0 0', verticalAlign: 'top'}}>
-                        <div style={{marginBottom: '8px'}}>Mengetahui,</div>
-                        <div style={{marginBottom: '8px'}}>Orang Tua/Wali</div>
-                        <div style={{marginTop: '60px'}}></div>
-                        <div style={{borderBottom: '1px solid #000', width: '70mm', margin: '0 auto'}}></div>
-                      </td>
-                      <td style={{width: '50%', textAlign: 'center', border: 'none', padding: '0 0 0 30px', verticalAlign: 'top'}}>
-                        <div style={{marginBottom: '8px'}}>Wali Kelas</div>
-                        <div style={{marginBottom: '8px'}}>&nbsp;</div>
-                        <div style={{marginTop: '60px'}}></div>
-                        <div style={{borderBottom: '1px solid #000', width: '70mm', margin: '0 auto'}}></div>
-                        <div style={{marginTop: '4px'}}>{currentStudent?.nama_wali_kelas || '.........................'}</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                {/* Kepala Sekolah - tengah bawah dengan tanggal */}
-                <div style={{marginTop: '30px'}}></div>
-                <table className="borderless-table w-full" style={{fontSize: '11pt'}}>
-                  <tbody>
-                    <tr>
-                      <td style={{textAlign: 'center', border: 'none', padding: '0'}}>
-                        <div style={{marginBottom: '8px'}}>Jakarta, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
-                        <div style={{marginBottom: '8px'}}>Mengetahui,</div>
-                        <div style={{marginBottom: '8px'}}>Kepala Sekolah</div>
-                        <div style={{marginTop: '60px'}}></div>
-                        <div style={{borderBottom: '1px solid #000', width: '70mm', margin: '0 auto'}}></div>
-                        <div style={{marginTop: '4px'}}>{schoolSettings?.nama_kepala_sekolah || '.........................'}</div>
-                        <div style={{fontSize: '10pt'}}>{(schoolSettings as any)?.niy_kepala_sekolah ? `NIY. ${(schoolSettings as any).niy_kepala_sekolah}` : ''}</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+          <div
+            ref={reportRef}
+            className="print-report rounded-xl border border-border bg-white p-6 animate-fade-in"
+            style={{ color: '#1a1a1a', backgroundColor: '#ffffff' }}
+          >
+            {/* Kop Rapor */}
+            <div className="kop-rapor mb-6" style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px', borderBottom: '3px double black' }}>
+              <div className="kop-logos" style={{ width: '15%', textAlign: 'left', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                {schoolSettings?.logo_url ? (
+                  <img src={schoolSettings.logo_url} alt="Logo Sekolah" style={{ height: '80px', width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+                ) : null}
               </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/50 py-16 no-print">
+
+              <div style={{ width: '70%', textAlign: 'center', padding: '0 10px' }}>
+                {(schoolSettings as any)?.nama_yayasan && (
+                  <p style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', margin: '0 0 4px 0' }}>
+                    {(schoolSettings as any).nama_yayasan}
+                  </p>
+                )}
+                <h2 style={{ fontSize: '15px', fontWeight: 'bold', textTransform: 'uppercase', margin: '0 0 4px 0' }}>
+                  {schoolSettings?.nama_sekolah}
+                </h2>
+                <p style={{ fontSize: '11px', margin: '0 0 2px 0' }}>{schoolSettings?.alamat}</p>
+                <p style={{ fontSize: '11px', margin: '0 0 2px 0' }}>
+                  {schoolSettings?.telepon && `Telp: ${schoolSettings.telepon}`}
+                  {schoolSettings?.email && ` | Email: ${schoolSettings.email}`}
+                </p>
+                {schoolSettings?.website && (
+                  <p style={{ fontSize: '11px', margin: '0' }}>{schoolSettings.website}</p>
+                )}
+              </div>
+
+              <div className="kop-logos" style={{ width: '15%', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                {(schoolSettings as any)?.logo_yayasan_url ? (
+                  <img src={(schoolSettings as any).logo_yayasan_url} alt="Logo Yayasan/Dinas" style={{ height: '80px', width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+                ) : null}
+              </div>
+            </div>
+
+            {/* Title */}
+            <div style={{ textAlign: 'center', marginBottom: '24px', margin: '0 auto 24px auto' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase', margin: '0 0 8px 0' }}>
+                CAPAIAN KOMPETENSI PESERTA DIDIK
+              </h3>
+              <p style={{ fontSize: '14px', margin: '0' }}>
+                SUMATIF AKHIR SEMESTER
+              </p>
+            </div>
+
+            {/* Student Info - two column layout */}
+            <table className="borderless-table w-full mb-4" style={{ border: 'none', borderCollapse: 'collapse' }}>
+              <tbody>
+                <tr>
+                  <td style={{ width: '18%', border: 'none', padding: '4px 0' }}>Nama Lengkap</td>
+                  <td style={{ width: '2%', border: 'none', padding: '4px 0', textAlign: 'center' }}>:</td>
+                  <td style={{ width: '30%', border: 'none', padding: '4px 0' }}>{currentStudent.nama_lengkap}</td>
+                  <td style={{ width: '15%', border: 'none', padding: '4px 0' }}>Kelas / Fase</td>
+                  <td style={{ width: '2%', border: 'none', padding: '4px 0', textAlign: 'center' }}>:</td>
+                  <td style={{ width: '33%', border: 'none', padding: '4px 0' }}>{currentStudent.kelas}</td>
+                </tr>
+                <tr>
+                  <td style={{ width: '18%', border: 'none', padding: '4px 0' }}>NISN</td>
+                  <td style={{ width: '2%', border: 'none', padding: '4px 0', textAlign: 'center' }}>:</td>
+                  <td style={{ width: '30%', border: 'none', padding: '4px 0' }}>{currentStudent.nis}</td>
+                  <td style={{ width: '15%', border: 'none', padding: '4px 0' }}>Semester</td>
+                  <td style={{ width: '2%', border: 'none', padding: '4px 0', textAlign: 'center' }}>:</td>
+                  <td style={{ width: '33%', border: 'none', padding: '4px 0' }}>{schoolSettings?.semester === "1" ? "Ganjil" : "Genap"}</td>
+                </tr>
+                <tr>
+                  <td style={{ width: '18%', border: 'none', padding: '4px 0' }}>NPSN</td>
+                  <td style={{ width: '2%', border: 'none', padding: '4px 0', textAlign: 'center' }}>:</td>
+                  <td style={{ width: '30%', border: 'none', padding: '4px 0' }}>{schoolSettings?.npsn}</td>
+                  <td style={{ width: '15%', border: 'none', padding: '4px 0' }}>Tahun Ajaran</td>
+                  <td style={{ width: '2%', border: 'none', padding: '4px 0', textAlign: 'center' }}>:</td>
+                  <td style={{ width: '33%', border: 'none', padding: '4px 0' }}>{schoolSettings?.tahun_pelajaran}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Grades Header */}
+            <h4 className="font-semibold mb-2" style={{ margin: '16px 0 8px 0' }}>A. Nilai Akademik</h4>
+
+            {/* Grades Table */}
+            <table className="grades_tbl w-full border border-gray-300 border-collapse mb-4">
+              <colgroup>
+                <col className="no-col" />
+                <col className="subject-col" />
+                <col className="grade-col" />
+                <col className="competency-col" />
+              </colgroup>
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 p-2 no-col" style={{ textAlign: 'center' }}>No</th>
+                  <th className="border border-gray-300 p-2 subject-col">Mata Pelajaran</th>
+                  <th className="border border-gray-300 p-2 grade-col" style={{ textAlign: 'center' }}>Nilai</th>
+                  <th className="border border-gray-300 p-2 competency-col">Capaian Kompetensi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredSubjects.map((subject, index) => {
+                  const grade = studentGrades.find((g) => g.subject_id === subject.id);
+                  return (
+                    <tr key={subject.id}>
+                      <td className="border border-gray-300 p-2 no-col" style={{ textAlign: 'center' }}>{index + 1}</td>
+                      <td className="border border-gray-300 p-2 subject-col">{subject.nama}</td>
+                      <td className="border border-gray-300 p-2 font-medium grade-col" style={{ textAlign: 'center' }}>
+                        {grade?.nilai_akhir || "-"}
+                      </td>
+                      <td className="border border-gray-300 p-2 competency-col">
+                        {grade?.capaian_kompetensi || "-"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            {/* Attendance (vertical layout) */}
+            <h4 className="font-semibold mb-2" style={{ margin: '16px 0 8px 0' }}>B. Ketidakhadiran</h4>
+            <table className="attendance_tbl w-full border border-gray-300 border-collapse mb-8">
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 p-2" style={{ width: '85%' }}>Sakit</td>
+                  <td className="border border-gray-300 p-2" style={{ width: '15%', textAlign: 'center' }}>{studentAttendance?.sakit || 0} hari</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 p-2">Izin</td>
+                  <td className="border border-gray-300 p-2" style={{ textAlign: 'center' }}>{studentAttendance?.izin || 0} hari</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 p-2">Tanpa Keterangan</td>
+                  <td className="border border-gray-300 p-2" style={{ textAlign: 'center' }}>{studentAttendance?.tanpa_keterangan || 0} hari</td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* C. Ekstrakurikuler */}
+            <h4 className="font-semibold mb-2" style={{ margin: '16px 0 8px 0' }}>C. Ekstrakurikuler</h4>
+            <table className="w-full border border-gray-300 border-collapse mb-4">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 p-2" style={{ width: '5%', textAlign: 'center' }}>No</th>
+                  <th className="border border-gray-300 p-2" style={{ width: '45%' }}>Kegiatan Ekstrakurikuler</th>
+                  <th className="border border-gray-300 p-2" style={{ width: '15%', textAlign: 'center' }}>Predikat</th>
+                  <th className="border border-gray-300 p-2" style={{ width: '35%' }}>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                {studentEkstrakurikuler.length > 0 ? (
+                  studentEkstrakurikuler.map((e, index) => (
+                    <tr key={e.id}>
+                      <td className="border border-gray-300 p-2" style={{ textAlign: 'center' }}>{index + 1}</td>
+                      <td className="border border-gray-300 p-2">{e.nama_kegiatan}</td>
+                      <td className="border border-gray-300 p-2" style={{ textAlign: 'center' }}>{e.predikat || '-'}</td>
+                      <td className="border border-gray-300 p-2">{e.keterangan || '-'}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="border border-gray-300 p-2 text-center" colSpan={4} style={{ height: '40px' }}>-</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+
+            {/* D. Prestasi */}
+            <h4 className="font-semibold mb-2" style={{ margin: '16px 0 8px 0' }}>D. Prestasi</h4>
+            <table className="w-full border border-gray-300 border-collapse mb-4">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 p-2" style={{ width: '5%', textAlign: 'center' }}>No</th>
+                  <th className="border border-gray-300 p-2" style={{ width: '45%' }}>Jenis Prestasi</th>
+                  <th className="border border-gray-300 p-2" style={{ width: '15%', textAlign: 'center' }}>Tingkat</th>
+                  <th className="border border-gray-300 p-2" style={{ width: '35%' }}>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                {studentPrestasi.length > 0 ? (
+                  studentPrestasi.map((p, index) => (
+                    <tr key={p.id}>
+                      <td className="border border-gray-300 p-2" style={{ textAlign: 'center' }}>{index + 1}</td>
+                      <td className="border border-gray-300 p-2">{p.jenis_prestasi}</td>
+                      <td className="border border-gray-300 p-2" style={{ textAlign: 'center' }}>{p.tingkat || '-'}</td>
+                      <td className="border border-gray-300 p-2">{p.keterangan || '-'}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="border border-gray-300 p-2 text-center" colSpan={4} style={{ height: '40px' }}>-</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+
+            {/* E. Catatan Wali Kelas */}
+            <h4 className="font-semibold mb-2" style={{ margin: '16px 0 8px 0' }}>E. Catatan Wali Kelas</h4>
+            <div style={{ border: '1px solid #333', padding: '12px', minHeight: '80px', marginBottom: '16px', whiteSpace: 'pre-wrap' }}>
+              {currentStudentNote?.catatan_wali_kelas || ''}
+            </div>
+
+            {/* F. Tanggapan Orang Tua/Wali */}
+            <h4 className="font-semibold mb-2" style={{ margin: '16px 0 8px 0' }}>F. Tanggapan Orang Tua/Wali</h4>
+            <div style={{ border: '1px solid #333', padding: '12px', minHeight: '80px', marginBottom: '24px', whiteSpace: 'pre-wrap' }}>
+              {currentStudentNote?.tanggapan_orang_tua || ''}
+            </div>
+
+            {/* Signatures - Wali Murid (kiri) & Wali Kelas (kanan) */}
+            <div style={{ marginTop: '40px' }}></div>
+            <table className="borderless-table w-full" style={{ fontSize: '11pt' }}>
+              <tbody>
+                <tr>
+                  <td style={{ width: '50%', textAlign: 'center', border: 'none', padding: '0 30px 0 0', verticalAlign: 'top' }}>
+                    <div style={{ marginBottom: '8px' }}>Mengetahui,</div>
+                    <div style={{ marginBottom: '8px' }}>Orang Tua/Wali</div>
+                    <div style={{ marginTop: '60px' }}></div>
+                    <div style={{ borderBottom: '1px solid #000', width: '70mm', margin: '0 auto' }}></div>
+                  </td>
+                  <td style={{ width: '50%', textAlign: 'center', border: 'none', padding: '0 0 0 30px', verticalAlign: 'top' }}>
+                    <div style={{ marginBottom: '8px' }}>Wali Kelas</div>
+                    <div style={{ marginBottom: '8px' }}>&nbsp;</div>
+                    <div style={{ marginTop: '60px' }}></div>
+                    <div style={{ borderBottom: '1px solid #000', width: '70mm', margin: '0 auto' }}></div>
+                    <div style={{ marginTop: '4px' }}>{currentStudent?.nama_wali_kelas || '.........................'}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Kepala Sekolah - tengah bawah dengan tanggal */}
+            <div style={{ marginTop: '30px' }}></div>
+            <table className="borderless-table w-full" style={{ fontSize: '11pt' }}>
+              <tbody>
+                <tr>
+                  <td style={{ textAlign: 'center', border: 'none', padding: '0' }}>
+                    <div style={{ marginBottom: '8px' }}>Jakarta, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                    <div style={{ marginBottom: '8px' }}>Mengetahui,</div>
+                    <div style={{ marginBottom: '8px' }}>Kepala Sekolah</div>
+                    <div style={{ marginTop: '60px' }}></div>
+                    <div style={{ borderBottom: '1px solid #000', width: '70mm', margin: '0 auto' }}></div>
+                    <div style={{ marginTop: '4px' }}>{schoolSettings?.nama_kepala_sekolah || '.........................'}</div>
+                    <div style={{ fontSize: '10pt' }}>{(schoolSettings as any)?.niy_kepala_sekolah ? `NIY. ${(schoolSettings as any).niy_kepala_sekolah}` : ''}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/50 py-16 no-print">
             <FileText className="mb-4 h-12 w-12 text-muted-foreground" />
             <p className="text-muted-foreground">
               Pilih kelas dan siswa untuk melihat preview rapor

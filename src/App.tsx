@@ -17,6 +17,7 @@ import Admin from "./pages/Admin";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import EkstrakurikulerPrestasi from "./pages/EkstrakurikulerPrestasi";
+import StudentNotes from "./pages/StudentNotes";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/grades" element={<ProtectedRoute><GradeInput /></ProtectedRoute>} />
           <Route path="/attendance" element={<ProtectedRoute><Attendance /></ProtectedRoute>} />
           <Route path="/ekstrakurikuler-prestasi" element={<ProtectedRoute><EkstrakurikulerPrestasi /></ProtectedRoute>} />
+          <Route path="/student-notes" element={<ProtectedRoute><StudentNotes /></ProtectedRoute>} />
           <Route path="/preview" element={<ProtectedRoute><ReportPreview /></ProtectedRoute>} />
           <Route path="/lock" element={<ProtectedRoute><LockReport /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
