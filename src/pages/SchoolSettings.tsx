@@ -30,6 +30,7 @@ interface FormData {
   logo_url: string;
   logo_yayasan_url: string;
   tanggal_rapor: string;
+  tempat_rapor: string;
 }
 
 export default function SchoolSettings() {
@@ -50,6 +51,7 @@ export default function SchoolSettings() {
     logo_url: "",
     logo_yayasan_url: "",
     tanggal_rapor: "",
+    tempat_rapor: "",
   });
 
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function SchoolSettings() {
         logo_url: schoolSettings.logo_url || "",
         logo_yayasan_url: (schoolSettings as any).logo_yayasan_url || "",
         tanggal_rapor: (schoolSettings as any).tanggal_rapor || "",
+        tempat_rapor: (schoolSettings as any).tempat_rapor || "",
       });
     }
   }, [schoolSettings]);
@@ -325,7 +328,19 @@ export default function SchoolSettings() {
                   placeholder="123456789"
                 />
               </div>
-              <div className="space-y-2 md:col-span-2">
+              <div className="space-y-2">
+                <Label htmlFor="tempat_rapor">Tempat Rapor</Label>
+                <Input
+                  id="tempat_rapor"
+                  value={formData.tempat_rapor}
+                  onChange={(e) => handleChange("tempat_rapor", e.target.value)}
+                  placeholder="Contoh: Bandung, Surabaya, dll"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Nama kota/tempat yang akan ditampilkan pada rapor.
+                </p>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="tanggal_rapor">Tanggal Rapor</Label>
                 <Input
                   id="tanggal_rapor"

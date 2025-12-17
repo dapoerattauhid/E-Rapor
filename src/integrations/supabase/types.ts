@@ -291,6 +291,7 @@ export type Database = {
           tahun_pelajaran: string
           tanggal_rapor: string | null
           telepon: string | null
+          tempat_rapor: string | null
           updated_at: string
           website: string | null
         }
@@ -310,6 +311,7 @@ export type Database = {
           tahun_pelajaran?: string
           tanggal_rapor?: string | null
           telepon?: string | null
+          tempat_rapor?: string | null
           updated_at?: string
           website?: string | null
         }
@@ -329,6 +331,7 @@ export type Database = {
           tahun_pelajaran?: string
           tanggal_rapor?: string | null
           telepon?: string | null
+          tempat_rapor?: string | null
           updated_at?: string
           website?: string | null
         }

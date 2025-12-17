@@ -40,6 +40,7 @@ export interface DbSubject {
   nama: string;
   kode: string;
   kelas?: string[];
+  urutan?: number | null;
   created_at: string;
 }
 
