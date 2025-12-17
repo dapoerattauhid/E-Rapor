@@ -58,6 +58,68 @@ export type Database = {
           },
         ]
       }
+      classes: {
+        Row: {
+          created_at: string
+          id: string
+          nama: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nama: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nama?: string
+        }
+        Relationships: []
+      }
+      ekstrakurikuler: {
+        Row: {
+          created_at: string
+          id: string
+          keterangan: string | null
+          nama_kegiatan: string
+          predikat: string | null
+          semester: string
+          student_id: string
+          tahun_pelajaran: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keterangan?: string | null
+          nama_kegiatan: string
+          predikat?: string | null
+          semester: string
+          student_id: string
+          tahun_pelajaran: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keterangan?: string | null
+          nama_kegiatan?: string
+          predikat?: string | null
+          semester?: string
+          student_id?: string
+          tahun_pelajaran?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ekstrakurikuler_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       grades: {
         Row: {
           capaian_kompetensi: string | null
@@ -144,6 +206,50 @@ export type Database = {
           },
         ]
       }
+      prestasi: {
+        Row: {
+          created_at: string
+          id: string
+          jenis_prestasi: string
+          keterangan: string | null
+          semester: string
+          student_id: string
+          tahun_pelajaran: string
+          tingkat: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          jenis_prestasi: string
+          keterangan?: string | null
+          semester: string
+          student_id: string
+          tahun_pelajaran: string
+          tingkat?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          jenis_prestasi?: string
+          keterangan?: string | null
+          semester?: string
+          student_id?: string
+          tahun_pelajaran?: string
+          tingkat?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prestasi_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -175,7 +281,7 @@ export type Database = {
           email: string | null
           id: string
           logo_url: string | null
-          logo_dinas_url: string | null
+          logo_yayasan_url: string | null
           nama_kepala_sekolah: string | null
           nama_sekolah: string
           nama_yayasan: string | null
@@ -183,16 +289,18 @@ export type Database = {
           npsn: string
           semester: string
           tahun_pelajaran: string
+          tanggal_rapor: string | null
           telepon: string | null
           updated_at: string
           website: string | null
+        }
         Insert: {
           alamat?: string | null
           created_at?: string
           email?: string | null
           id?: string
           logo_url?: string | null
-          logo_dinas_url?: string | null
+          logo_yayasan_url?: string | null
           nama_kepala_sekolah?: string | null
           nama_sekolah: string
           nama_yayasan?: string | null
@@ -200,16 +308,18 @@ export type Database = {
           npsn: string
           semester?: string
           tahun_pelajaran?: string
+          tanggal_rapor?: string | null
           telepon?: string | null
           updated_at?: string
           website?: string | null
+        }
         Update: {
           alamat?: string | null
           created_at?: string
           email?: string | null
           id?: string
           logo_url?: string | null
-          logo_dinas_url?: string | null
+          logo_yayasan_url?: string | null
           nama_kepala_sekolah?: string | null
           nama_sekolah?: string
           nama_yayasan?: string | null
@@ -217,13 +327,53 @@ export type Database = {
           npsn?: string
           semester?: string
           tahun_pelajaran?: string
+          tanggal_rapor?: string | null
           telepon?: string | null
           updated_at?: string
           website?: string | null
-        } updated_at?: string
-          website?: string | null
         }
         Relationships: []
+      }
+      student_notes: {
+        Row: {
+          catatan_wali_kelas: string | null
+          created_at: string
+          id: string
+          semester: string
+          student_id: string
+          tahun_pelajaran: string
+          tanggapan_orang_tua: string | null
+          updated_at: string
+        }
+        Insert: {
+          catatan_wali_kelas?: string | null
+          created_at?: string
+          id?: string
+          semester: string
+          student_id: string
+          tahun_pelajaran: string
+          tanggapan_orang_tua?: string | null
+          updated_at?: string
+        }
+        Update: {
+          catatan_wali_kelas?: string | null
+          created_at?: string
+          id?: string
+          semester?: string
+          student_id?: string
+          tahun_pelajaran?: string
+          tanggapan_orang_tua?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_notes_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       students: {
         Row: {
@@ -271,25 +421,63 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          kelas: string[] | null
           kode: string
           nama: string
-          urutan: number
+          urutan: number | null
         }
         Insert: {
           created_at?: string
           id?: string
+          kelas?: string[] | null
           kode: string
           nama: string
-          urutan?: number
+          urutan?: number | null
         }
         Update: {
           created_at?: string
           id?: string
+          kelas?: string[] | null
           kode?: string
           nama?: string
-          urutan?: number
+          urutan?: number | null
         }
         Relationships: []
+      }
+      subjects_by_class: {
+        Row: {
+          created_at: string
+          id: string
+          kelas: string
+          subject_id: string
+          updated_at: string
+          urutan: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kelas: string
+          subject_id: string
+          updated_at?: string
+          urutan?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kelas?: string
+          subject_id?: string
+          updated_at?: string
+          urutan?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subjects_by_class_subject_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       teacher_class_assignments: {
         Row: {
@@ -335,6 +523,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_wali_kelas_user: {
+        Args: { p_email: string; p_full_name: string; p_password: string }
+        Returns: Json
+      }
+      ensure_user_wali_kelas_role: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
       has_class_access: {
         Args: { _kelas: string; _user_id: string }
         Returns: boolean
@@ -345,6 +541,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      set_user_wali_kelas_role: {
+        Args: { user_id: string }
+        Returns: undefined
       }
     }
     Enums: {

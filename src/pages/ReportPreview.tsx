@@ -452,7 +452,7 @@ export default function ReportPreview() {
               <tbody>
                 <tr>
                   <td style={{ textAlign: 'center', border: 'none', padding: '0' }}>
-                    <div style={{ marginBottom: '8px' }}>Jakarta, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                    <div style={{ marginBottom: '8px' }}>Jakarta, {(schoolSettings as any)?.tanggal_rapor ? new Date((schoolSettings as any).tanggal_rapor).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
                     <div style={{ marginBottom: '8px' }}>Mengetahui,</div>
                     <div style={{ marginBottom: '8px' }}>Kepala Sekolah</div>
                     <div style={{ marginTop: '60px' }}></div>

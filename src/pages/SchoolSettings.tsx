@@ -29,6 +29,7 @@ interface FormData {
   website: string;
   logo_url: string;
   logo_yayasan_url: string;
+  tanggal_rapor: string;
 }
 
 export default function SchoolSettings() {
@@ -48,6 +49,7 @@ export default function SchoolSettings() {
     website: "",
     logo_url: "",
     logo_yayasan_url: "",
+    tanggal_rapor: "",
   });
 
   useEffect(() => {
@@ -66,6 +68,7 @@ export default function SchoolSettings() {
         website: schoolSettings.website || "",
         logo_url: schoolSettings.logo_url || "",
         logo_yayasan_url: (schoolSettings as any).logo_yayasan_url || "",
+        tanggal_rapor: (schoolSettings as any).tanggal_rapor || "",
       });
     }
   }, [schoolSettings]);
@@ -321,6 +324,18 @@ export default function SchoolSettings() {
                   onChange={(e) => handleChange("niy_kepala_sekolah", e.target.value)}
                   placeholder="123456789"
                 />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="tanggal_rapor">Tanggal Rapor</Label>
+                <Input
+                  id="tanggal_rapor"
+                  type="date"
+                  value={formData.tanggal_rapor}
+                  onChange={(e) => handleChange("tanggal_rapor", e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Tanggal yang akan ditampilkan pada rapor. Jika kosong, akan menggunakan tanggal saat mencetak.
+                </p>
               </div>
 
             </div>
