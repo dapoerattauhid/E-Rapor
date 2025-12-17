@@ -13,6 +13,7 @@ import {
   User,
   Award,
   FileEdit,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -30,6 +31,7 @@ const menuItems = [
   { icon: Calendar, label: "Ketidakhadiran", path: "/attendance" },
   { icon: Award, label: "Ekstrakurikuler & Prestasi", path: "/ekstrakurikuler-prestasi" },
   { icon: FileEdit, label: "Catatan Siswa", path: "/student-notes" },
+  { icon: Trophy, label: "Ranking Siswa", path: "/ranking" },
   { icon: FileText, label: "Preview Rapor", path: "/preview" },
   { icon: Lock, label: "Kunci Rapor", path: "/lock" },
   { icon: Shield, label: "Admin", path: "/admin" },
