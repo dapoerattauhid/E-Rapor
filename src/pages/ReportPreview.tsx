@@ -263,7 +263,7 @@ export default function ReportPreview() {
                 CAPAIAN KOMPETENSI PESERTA DIDIK
               </h3>
               <p style={{ fontSize: '14px', margin: '0' }}>
-                SUMATIF AKHIR SEMESTER
+                SUMATIF AKHIR TAHUN
               </p>
             </div>
 
