@@ -146,6 +146,9 @@ export function useSchoolSettings() {
       if (error) throw error;
       return data as DbSchoolSettings | null;
     },
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchOnMount: "always",
   });
 }
 
