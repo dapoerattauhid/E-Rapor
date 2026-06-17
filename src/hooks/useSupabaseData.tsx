@@ -299,9 +299,23 @@ export function useGrades() {
   return useQuery({
     queryKey: ["grades"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("grades").select("*");
-      if (error) throw error;
-      return data as DbGrade[];
+      // Supabase/PostgREST membatasi setiap query maksimal 1000 baris.
+      // Ambil seluruh data nilai secara bertahap (paginasi) agar tidak terpotong.
+      const pageSize = 1000;
+      let from = 0;
+      let allGrades: DbGrade[] = [];
+      while (true) {
+        const { data, error } = await supabase
+          .from("grades")
+          .select("*")
+          .range(from, from + pageSize - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        allGrades = allGrades.concat(data as DbGrade[]);
+        if (data.length < pageSize) break;
+        from += pageSize;
+      }
+      return allGrades;
     },
   });
 }
