@@ -88,7 +88,7 @@ export default function GradeInput() {
 
       setGradesData(newGradesData);
     }
-  }, [selectedKelas, selectedSubject, schoolSettings]);
+  }, [selectedKelas, selectedSubject, schoolSettings, grades, students]);
 
   const handleNilaiChange = (studentId: string, value: string) => {
     // Validasi: hanya biarkan angka 0-100
